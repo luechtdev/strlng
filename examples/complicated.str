@@ -1,0 +1,31 @@
+
+; I am a comment
+
+
+#entry main             ; Selectable entrypoint
+#rtarg $dies
+
+main $1:l $2:n $3:s =>        ; Create new function "main"
+    "Hello World"       ; Start with a constant string
+    /\w+/               ; Native Regex Support
+
+    #1:                 ; For first match:
+        "<$$>"          ; Set string to "<$$>", where $$ is the previous value
+
+    #2:                     ; For the second match:
+        prfx "the"          ; Call `prefix` to prefix the string with "the"
+        sufx "we live in"   ; Call `suffix` to ...
+
+    merge                ; Merge all matches
+    @0
+<=
+
+
+test =>
+    "long text"
+    test /t/
+        prfx $^#1
+
+
+<=
+; Would return "<Hello> to the world we live in"
