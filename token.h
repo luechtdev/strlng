@@ -39,6 +39,13 @@ typedef enum {
 const char* Token_Type_Debug(Token_Type);
 
 typedef struct {
+    Token_Type  type;
+    const char* text;
+} Token_Literal;
+
+const Token_Literal* Token_getLiteral(const char* text);
+
+typedef struct {
     Token_Type type;
     char*      text;
     size_t     size;

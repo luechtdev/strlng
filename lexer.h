@@ -23,9 +23,9 @@ typedef struct {
 Lexer Lexer_new(const char*, size_t);
 
 Token Lexer_next(Lexer*);
-Token Lexer_next_progrm(Lexer*);
-Token Lexer_next_commnt(Lexer*);
-Token Lexer_next_string(Lexer*);
-Token Lexer_next_regexp(Lexer*);
+//Token Lexer_next_progrm(Lexer*);
+//Token Lexer_next_commnt(Lexer*);
+//Token Lexer_next_string(Lexer*);
+//Token Lexer_next_regexp(Lexer*);
 
 #endif //STRLNG_LEXER_H
