@@ -8,7 +8,14 @@ typedef enum {
         TOKEN_EOF       =  0,
         TOKEN_NEWLINE,
         TOKEN_INDENT,
+        TOKEN_WHITESPACE,
+
         TOKEN_REFERENCE,
+        TOKEN_REFERENCE_PIPE,
+        TOKEN_REFERENCE_PARENT,
+
+        TOKEN_STREAM,
+
         TOKEN_FLAGS,
         TOKEN_RETURN,
         TOKEN_RETURN_SINGLE,
@@ -16,27 +23,25 @@ typedef enum {
         TOKEN_NUMBER,
 
     // String Tokens
-        TOKEN_STRING_DELIM = 10,
-        TOKEN_STRING_REF,
+        TOKEN_STRING = 100,
+        TOKEN_STRING_DELIM,
 
     // Comment Tokens
-        TOKEN_COMMNT_INLINE = 20,
+        TOKEN_COMMNT_INLINE = 200,
         TOKEN_COMMNT_MULTI_BEG,
         TOKEN_COMMNT_MULTI_END,
         TOKEN_COMMNT_DOC,
 
     // Preprocessor Tokens
-        TOKEN_PREPRO_HASH = 30,
-
+        TOKEN_PREPRO_SYMBOL = 300,
 
     // RegularExpression Tokens
-        TOKEN_REGEXP_DELIM = 100,
+        TOKEN_REGEXP = 1000,
+        TOKEN_REGEXP_DELIM,
         TOKEN_REGEXP_FLAGS,
         TOKEN_REGEXP_ESC,
 
 } Token_Type;
-
-const char* Token_Type_Debug(Token_Type);
 
 typedef struct {
     Token_Type  type;
@@ -51,3 +56,5 @@ typedef struct {
     size_t     size;
 } Token;
 
+void Token_Type_Debug(Token);
+void Token_Text_Debug(Token);

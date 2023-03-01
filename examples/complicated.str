@@ -14,7 +14,7 @@ main $1:l $2:n $3:s =>        ; Create new function "main"
 
     #2:                     ; For the second match:
         prfx "the"          ; Call `prefix` to prefix the string with "the"
-        sufx "we live in"   ; Call `suffix` to ...
+        sufx:n $$ "we live in"   ; Call `suffix` to ...
 
     merge                ; Merge all matches
     @0

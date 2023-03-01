@@ -1,0 +1,4 @@
+#ifndef STRLNG_FN_LIST_H
+#define STRLNG_FN_LIST_H
+
+#endif //STRLNG_FN_LIST_H

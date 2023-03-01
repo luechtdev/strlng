@@ -45,7 +45,22 @@ typedef struct {
 } STRLNG_FUNCTION_SCOPE;
 
 typedef struct {
+    const int       argc;
+    const char**    argv;
 } STRLNG_GLOBAL_SCOPE;
+
+typedef struct {
+    const char* name;
+    const char* flags;
+    void* (*handler)(STRLNG_FUNCTION_SCOPE);
+} STRLNG_PKG_METHOD;
+
+#define STRLNG_PKG_END ((STRLNG_PKG_METHOD){.handler = NULL})
+
+typedef struct {
+    const char* name;
+    const STRLNG_PKG_METHOD* methods;
+} STRLNG_PKG;
 
 
 #endif //STRLNG_H

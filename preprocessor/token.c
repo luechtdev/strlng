@@ -1,6 +1,8 @@
 #include <string.h>
+#include <stdio.h>
 
 #include "token.h"
+#include "../debug.h"
 
 const Token_Literal Token_Literals_RegExp[] = {
     {.text="\\", .type=TOKEN_REGEXP_ESC},
@@ -11,9 +13,6 @@ const Token_Literal Token_Literals_RegExp[] = {
 
 const Token_Literal Token_Literals[] = {
     {.text="$", .type=TOKEN_REFERENCE},
-    {.text=":", .type=TOKEN_FLAGS},
-
-    {.text=";", .type=TOKEN_COMMNT_INLINE},
     {.text="@", .type=TOKEN_COMMNT_INLINE},
 
     {.text="\"",.type=TOKEN_STRING_DELIM},
@@ -82,47 +81,136 @@ const char* Token_Keywords[] = {
 };
 #define Token_Keywords_size (sizeof(Token_Keywords)/sizeof(Token_Keywords[0]))
 
-const char* Token_Type_Debug(Token_Type tt) {
-    switch (tt) {
+void Token_Type_Debug(Token t) {
+    switch (t.type) {
         case TOKEN_INVALID:
-            return "[Invalid Token]";
+            printf("[Invalid Token]: '%c'\n", *t.text);
+            return;
+
         case TOKEN_EOF:
-            return "[EOF]";
+            printf("\x1b[31m[EOF]\x1b[0m\n");
+            return;
+
         case TOKEN_NEWLINE:
-            return "[New Line]";
+            printf("[New Line]\n\n");
+            return;
+
         case TOKEN_INDENT:
-            return "[Tab]";
+            printf("[Tab] x%d\n", t.size);
+            return;
+
+        case TOKEN_WHITESPACE:
+            printf("[Whitespace] x%d\n", t.size);
+            return;
+
+
         case TOKEN_REFERENCE:
-            return "[$Ref]";
+            printf("[$Ref]\n");
+            return;
+
         case TOKEN_FLAGS:
-            return "[:Flags]";
+            printf("[:Flags] '%.*s'\n", t.size, t.text);
+            return;
+
         case TOKEN_RETURN:
-            return "[<= Return]";
+            printf("[<= Return]\n");
+            return;
+
         case TOKEN_RETURN_SINGLE:
-            return "[<- Return]";
+            printf("[<- Return]\n");
+            return;
+
         case TOKEN_SYMBOL:
-            return "[Symbol]";
+            printf("[Symbol] '%.*s'\n", t.size, t.text);
+            return;
+
         case TOKEN_NUMBER:
-            return "[Number]";
-        case TOKEN_STRING_DELIM:
-            return "[\"String delim]";
-        case TOKEN_STRING_REF:
-            return "[$ String ref]";
+            printf("[Number] '%.*s'\n", t.size, t.text);
+            return;
+
         case TOKEN_COMMNT_INLINE:
-            return "[;Comment]";
+            printf("[;Comment] '%.*s'\n", t.size, t.text);
+            return;
+
         case TOKEN_COMMNT_MULTI_BEG:
-            return "[TOKEN_COMMENT_MULTI_BEG]";
+            printf("[TOKEN_COMMENT_MULTI_BEG]\n");
+            return;
+
         case TOKEN_COMMNT_MULTI_END:
-            return "[TOKEN_COMMENT_MULTI_END]";
+            printf("[TOKEN_COMMENT_MULTI_END]\n");
+            return;
+
         case TOKEN_COMMNT_DOC:
-            return "[@Comment Doc]";
-        case TOKEN_PREPRO_HASH:
-            return "[#Preproc]";
+            printf("[@Comment Doc]\n");
+            return;
+
+        case TOKEN_PREPRO_SYMBOL:
+            printf("[#Preproc] %.*s'\n", t.size, t.text);
+            return;
+
         case TOKEN_REGEXP_DELIM:
-            return "[/Regexp Delim]";
+            printf("[/Regexp Delim]\n");
+            return;
+
         case TOKEN_REGEXP_FLAGS:
-            return "[/Regexp Flags]";
+            printf("[/Regexp Flags]\n");
+            return;
+
         case TOKEN_REGEXP_ESC:
-            return "[\\Regexp Escape]";
+            printf("[\\Regexp Escape]\n");
+            return;
+
+        default:
+            printf("[UNKNOWN TOKEN]\n");
+            return;
     }
+}
+
+void Token_Text_Debug(Token t) {
+    switch (t.type) {
+
+        case TOKEN_SYMBOL:
+            DEBUG_ANSI_ESC(42);
+            break;
+
+        case TOKEN_STRING:
+            DEBUG_ANSI_ESC(32);
+            break;
+
+        case TOKEN_STREAM:
+            DEBUG_ANSI_ESC(31);
+            break;
+
+        case TOKEN_REGEXP:
+            DEBUG_ANSI_ESC(41);
+            break;
+
+        case TOKEN_PREPRO_SYMBOL:
+            DEBUG_ANSI_ESC(46);
+            break;
+
+        case TOKEN_COMMNT_INLINE:
+            DEBUG_ANSI_ESC(37);
+            break;
+
+
+        case TOKEN_REFERENCE:
+            DEBUG_ANSI_ESC(33);
+            break;
+
+        case TOKEN_REFERENCE_PIPE:
+        case TOKEN_REFERENCE_PARENT:
+            DEBUG_ANSI_ESC(43);
+            break;
+
+        case TOKEN_FLAGS:
+            DEBUG_ANSI_ESC(95);
+            break;
+
+        default:
+            break;
+    }
+
+    fprintf(stdout, "%.*s\x1b[0m", t.size, t.text);
+
 }

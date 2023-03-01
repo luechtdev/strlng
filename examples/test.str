@@ -1,6 +1,10 @@
+#entry main     ; comment
+#tabsz 4
 
-#entry main; comment
-
-
-
-
+main $1:n =>
+	"123"
+	prfx "-"
+	int
+	base 2
+	@1
+<=

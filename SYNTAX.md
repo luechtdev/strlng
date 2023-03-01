@@ -33,6 +33,8 @@ _All Runtime Operations are defined by a hash followed by a 5 letter word._
 
 ### `#break`: Break on Error
 
+### `#bufsz`: Buffer size
+
 ### `#const`: Defining a constant
 
 
@@ -47,6 +49,8 @@ _All List Operations are defined by a 5 letter word._
 
 #### `words`: Split a string on whitespace
 
+#### `filtr`
+
 ## String Operations
 
 _All String Operations are defined by a 4 letter word._
@@ -55,8 +59,9 @@ _All String Operations are defined by a 4 letter word._
 ### `join`: Join list to string
 ### `conc`: Concatinate list to string
 ### `base`: Covert number into string
-- Arguments:
-  - 1: Base (default 10)
+- Usage:
+  ``base [base]``
+  ``base:n [number] [base]``
 - Example:
 ```
 base_example => 

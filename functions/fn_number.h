@@ -1,0 +1,4 @@
+#ifndef STRLNG_FN_NUMBER_H
+#define STRLNG_FN_NUMBER_H
+
+#endif //STRLNG_FN_NUMBER_H
