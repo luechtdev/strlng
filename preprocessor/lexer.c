@@ -12,6 +12,8 @@ inline Lexer Lexer_new(const char* text, const size_t size) {
     };
 }
 
+//// Consumer ////
+
 inline size_t Lexer_consume_symbol(Lexer* l) {
     size_t length = 0;
     while (isalnum(*l->curs) || *l->curs == '_') {
@@ -56,8 +58,6 @@ inline size_t Lexer_consume_regexp(Lexer* l) {
     return length;
 }
 
-
-
 inline size_t Lexer_consume_numeral(Lexer* l) {
     size_t length = 0;
     while (isdigit(*l->curs)) {
@@ -85,6 +85,8 @@ inline size_t Lexer_consume_whitespace(Lexer* l) {
     return length;
 }
 
+//// Consumer Handler ////
+
 inline Token Lexer_token_consumer (Lexer *l, const Token_Type type, size_t (*consumer)(Lexer*)) {
     char* token_pos = l->curs;
     size_t length = (*consumer)(l);
@@ -105,6 +107,20 @@ inline Token Lexer_token_consumer_p (Lexer* l, Token_Type type, size_t (*consume
         .text = token_pos
     };
 }
+
+inline Token Lexer_token_consumer_ps (Lexer* l, Token_Type type, size_t (*consumer)(Lexer*)) {
+    char* token_pos = l->curs;
+    l->curs++;
+    size_t length = (*consumer)(l);
+    l->curs++;
+    return (Token) {
+            .type = type,
+            .size = length + 2,
+            .text = token_pos
+    };
+}
+
+//// Tokenizing ////
 
 Token Lexer_next(Lexer* l) {
     char* token_pos = l->curs;
@@ -142,6 +158,11 @@ Token Lexer_next(Lexer* l) {
     // String
     if (*l->curs == '"') {
         return Lexer_token_consumer_p(l, TOKEN_STRING, &Lexer_consume_string);
+    }
+
+    // Packages
+    if (*l->curs == '[') {
+        return Lexer_token_consumer_ps(l, TOKEN_PACKAGE, &Lexer_consume_symbol);
     }
 
     // Regular Expression

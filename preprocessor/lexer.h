@@ -32,6 +32,7 @@ size_t  Lexer_consume_indent    (Lexer*);
 
 Token   Lexer_token_consumer    (Lexer*, Token_Type, size_t (*)(Lexer*));
 Token   Lexer_token_consumer_p  (Lexer*, Token_Type, size_t (*)(Lexer*));
+Token   Lexer_token_consumer_ps (Lexer*, Token_Type, size_t (*)(Lexer*));
 
 Token   Lexer_next              (Lexer*);
 

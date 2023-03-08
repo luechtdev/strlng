@@ -16,6 +16,9 @@ typedef enum {
 
         TOKEN_STREAM,
 
+        TOKEN_PACKAGE,
+        TOKEN_SCOPE,
+
         TOKEN_FLAGS,
         TOKEN_RETURN,
         TOKEN_RETURN_SINGLE,

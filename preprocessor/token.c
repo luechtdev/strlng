@@ -177,11 +177,12 @@ void Token_Text_Debug(Token t) {
             DEBUG_ANSI_ESC(32);
             break;
 
+        case TOKEN_REGEXP:
         case TOKEN_STREAM:
             DEBUG_ANSI_ESC(31);
             break;
 
-        case TOKEN_REGEXP:
+        case TOKEN_INVALID:
             DEBUG_ANSI_ESC(41);
             break;
 
@@ -193,11 +194,11 @@ void Token_Text_Debug(Token t) {
             DEBUG_ANSI_ESC(37);
             break;
 
-
         case TOKEN_REFERENCE:
             DEBUG_ANSI_ESC(33);
             break;
 
+        case TOKEN_PACKAGE:
         case TOKEN_REFERENCE_PIPE:
         case TOKEN_REFERENCE_PARENT:
             DEBUG_ANSI_ESC(43);
@@ -211,6 +212,6 @@ void Token_Text_Debug(Token t) {
             break;
     }
 
-    fprintf(stdout, "%.*s\x1b[0m", t.size, t.text);
+    fprintf(stdout, "%.*s\x1b[0m", (int) t.size, t.text);
 
 }

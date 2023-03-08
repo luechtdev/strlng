@@ -16,6 +16,9 @@ main $1:l $2:n $3:s =>        ; Create new function "main"
         prfx "the"          ; Call `prefix` to prefix the string with "the"
         sufx:n $$ "we live in"   ; Call `suffix` to ...
 
+    [jim]{integer:v}
+    .test
+
     merge                ; Merge all matches
     @0
 <=
