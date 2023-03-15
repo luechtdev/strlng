@@ -14,7 +14,7 @@ inline Lexer Lexer_new(const char* text, const size_t size) {
 
 //// Consumer ////
 
-inline size_t Lexer_consume_symbol(Lexer* l) {
+static inline size_t Lexer_consume_symbol(Lexer* l) {
     size_t length = 0;
     while (isalnum(*l->curs) || *l->curs == '_') {
         length++;
@@ -23,7 +23,7 @@ inline size_t Lexer_consume_symbol(Lexer* l) {
     return length;
 }
 
-inline size_t Lexer_consume_comment(Lexer* l) {
+static inline size_t Lexer_consume_comment(Lexer* l) {
     size_t length = 0;
     while (*l->curs != '\n' && *l->curs != '\0') {
         length++;
@@ -32,7 +32,7 @@ inline size_t Lexer_consume_comment(Lexer* l) {
     return length;
 }
 
-inline size_t Lexer_consume_string(Lexer* l) {
+static inline size_t Lexer_consume_string(Lexer* l) {
     size_t length = 0;
     while (*l->curs != '"' && *l->curs != '\0') {
         length++;
@@ -45,7 +45,7 @@ inline size_t Lexer_consume_string(Lexer* l) {
     return length;
 }
 
-inline size_t Lexer_consume_regexp(Lexer* l) {
+static inline size_t Lexer_consume_regexp(Lexer* l) {
     size_t length = 0;
     while (*l->curs != '/' && *l->curs != '\0') {
         length++;
@@ -58,7 +58,7 @@ inline size_t Lexer_consume_regexp(Lexer* l) {
     return length;
 }
 
-inline size_t Lexer_consume_numeral(Lexer* l) {
+static inline size_t Lexer_consume_numeral(Lexer* l) {
     size_t length = 0;
     while (isdigit(*l->curs)) {
         l->curs++;
@@ -67,7 +67,7 @@ inline size_t Lexer_consume_numeral(Lexer* l) {
     return length;
 }
 
-inline size_t Lexer_consume_indent(Lexer* l) {
+static inline size_t Lexer_consume_indent(Lexer* l) {
     size_t length = 0;
     while (*l->curs == '\t') {
         length++;
@@ -76,7 +76,7 @@ inline size_t Lexer_consume_indent(Lexer* l) {
     return length;
 }
 
-inline size_t Lexer_consume_whitespace(Lexer* l) {
+static inline size_t Lexer_consume_whitespace(Lexer* l) {
     size_t length = 0;
     while (isspace(*l->curs)) {
         length++;
@@ -87,7 +87,7 @@ inline size_t Lexer_consume_whitespace(Lexer* l) {
 
 //// Consumer Handler ////
 
-inline Token Lexer_token_consumer (Lexer *l, const Token_Type type, size_t (*consumer)(Lexer*)) {
+static inline Token Lexer_token_consumer (Lexer *l, const Token_Type type, size_t (*consumer)(Lexer*)) {
     char* token_pos = l->curs;
     size_t length = (*consumer)(l);
     return (Token) {
@@ -97,7 +97,7 @@ inline Token Lexer_token_consumer (Lexer *l, const Token_Type type, size_t (*con
     };
 }
 
-inline Token Lexer_token_consumer_p (Lexer* l, Token_Type type, size_t (*consumer)(Lexer*)) {
+static inline Token Lexer_token_consumer_p (Lexer* l, Token_Type type, size_t (*consumer)(Lexer*)) {
     char* token_pos = l->curs;
     l->curs++;
     size_t length = (*consumer)(l);
@@ -108,7 +108,7 @@ inline Token Lexer_token_consumer_p (Lexer* l, Token_Type type, size_t (*consume
     };
 }
 
-inline Token Lexer_token_consumer_ps (Lexer* l, Token_Type type, size_t (*consumer)(Lexer*)) {
+static inline Token Lexer_token_consumer_ps (Lexer* l, Token_Type type, size_t (*consumer)(Lexer*)) {
     char* token_pos = l->curs;
     l->curs++;
     size_t length = (*consumer)(l);

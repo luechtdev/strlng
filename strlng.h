@@ -1,5 +1,7 @@
 #include <ctype.h>
 
+#include "preprocessor/token.h"
+
 #ifndef STRLNG_H
 #define STRLNG_H
 

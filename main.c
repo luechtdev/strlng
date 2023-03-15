@@ -7,11 +7,15 @@
 #include <getopt.h>
 
 #include "preprocessor/lexer.h"
+#include "preprocessor/instruction_parser.h"
+
 #include "strlng.h"
 #include "debug.h"
 
 #define SCRIPT_BUFFER_SIZE 32
 #define SCRIPT_BUFFER_BLOCK_SIZE (SCRIPT_BUFFER_SIZE * sizeof (char))
+
+#define RT_VERBOSEONLY if (RT_mode_verbs)
 
 int main(const int argc, const char** argv) {
 
@@ -52,7 +56,7 @@ int main(const int argc, const char** argv) {
         return errno;
     }
 
-    DEBUG_FILE_READING(filePath);
+    RT_VERBOSEONLY DEBUG_FILE_READING(filePath);
 
     //// Read file to Buffer ////
 
@@ -65,11 +69,10 @@ int main(const int argc, const char** argv) {
         char* offset = &script_buffer[SCRIPT_BUFFER_SIZE * (script_buffer_block - 1)];
         memset(offset, 0, SCRIPT_BUFFER_BLOCK_SIZE);
         script_buffer_written = fread(offset, sizeof (char), SCRIPT_BUFFER_SIZE, script);
-        fprintf(stdout, " .");
     } while(script_buffer_written == SCRIPT_BUFFER_SIZE);
 
     fclose(script);
-    fprintf(stdout, "[Read File]: %d buffer filled (+%d)\n\n\n", script_buffer_block, script_buffer_written);
+    RT_VERBOSEONLY DEBUG_FILE_BUFFER(script_buffer_block, script_buffer_written);
 
     //// Lexing / Tokenizing ////
 
@@ -93,7 +96,6 @@ int main(const int argc, const char** argv) {
         token_line_counter++;
 
         if (t.type == TOKEN_NEWLINE || t.type == TOKEN_EOF) {
-
             // Save line pointer to heap
             lines = realloc(lines, sizeof (Token*) * (lines_count + 1));
             lines[lines_count] = &token_buffer[token_buffer_size - token_line_counter];
@@ -105,11 +107,15 @@ int main(const int argc, const char** argv) {
 
     if (RT_mode_token) goto free_memory;
 
-    fprintf(stdout, "Read %d lines.", lines_count);
+    RT_VERBOSEONLY DEBUG_FILE_READ(lines_count);
 
     //// Line instruction parsing ////
 
+    Token** line = lines;
 
+    do {
+       Token_Type_Debug(**line);
+    } while ((*line++)->type);
 
     //// Preprocessor execution ////
 
@@ -121,7 +127,6 @@ int main(const int argc, const char** argv) {
     //// Free memory ////
 free_memory:
 
-    // for (size_t i = 0; i < lines_count; ++i) free(lines[i]);
     free(lines);
     free(script_buffer);
     free(token_buffer);

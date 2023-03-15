@@ -18,12 +18,16 @@ typedef struct {
 } InstructionParser;
 
 typedef struct {
-    size_t      argc;
-    Token**     argv;
+    size_t          argc;
+    Token*          argv;
+    InstructionType type;
+    char*           flgs;
     void (*handler)();
 } Instruction;
 
-inline InstructionParser InstructionParser_new(Token**);
+InstructionParser InstructionParser_new(Token**);
+
+static inline size_t InstructionParser_consume_prepro(Token**);
 
 Instruction InstructionParser_next(InstructionParser*);
 
