@@ -81,10 +81,12 @@ int main(const int argc, const char** argv) {
     Lexer l = Lexer_new(script_buffer, len);
 
     Token   t;
+
     Token*  token_buffer        = NULL;
     size_t  token_buffer_size   = 0;
     size_t  token_line_counter  = 0;
-    Token** lines               = NULL;
+
+    size_t* lines_index         = NULL;
     size_t  lines_count         = 0;
 
     do {
@@ -97,13 +99,23 @@ int main(const int argc, const char** argv) {
 
         if (t.type == TOKEN_NEWLINE || t.type == TOKEN_EOF) {
             // Save line pointer to heap
-            lines = realloc(lines, sizeof (Token*) * (lines_count + 1));
-            lines[lines_count] = &token_buffer[token_buffer_size - token_line_counter];
+            lines_index = realloc(lines_index, sizeof (size_t*) * (lines_count + 1));
+            lines_index[lines_count] = token_buffer_size - token_line_counter;
             lines_count++;
             token_line_counter = 0;
+//            lines = realloc(lines, sizeof (Token*) * (lines_count + 1));
+//            lines[lines_count] = &token_buffer[token_buffer_size - token_line_counter];
+//            lines_count++;
+//            token_line_counter = 0;
         }
 
     } while (t.type);
+
+    // Lines pointer in final heap token buffer
+    Token** lines = calloc(lines_count, sizeof (Token*));
+
+    for (size_t i = 0; i < lines_count; i++) lines[i] = &token_buffer[lines_index[i]];
+    free(lines_index); lines_index = NULL;
 
     if (RT_mode_token) goto free_memory;
 
@@ -113,9 +125,24 @@ int main(const int argc, const char** argv) {
 
     Token** line = lines;
 
+    InstructionParser ip = InstructionParser_new(lines);
+
+    Instruction instruction;
+
     do {
-       Token_Type_Debug(**line);
-    } while ((*line++)->type);
+        instruction = InstructionParser_next(&ip);
+    } while (instruction.handler);
+
+
+//    do {
+//       Token_Type_Debug(**line);
+//
+//
+//    } while ((*line++)->type);
+
+
+
+
 
     //// Preprocessor execution ////
 
